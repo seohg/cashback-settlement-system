@@ -1,5 +1,6 @@
 package com.larva.cashback.domain.member;
 
+import com.larva.cashback.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -12,7 +13,7 @@ import java.time.LocalDateTime;
 @Table(name = "member")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Member {
+public class Member extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,15 +24,10 @@ public class Member {
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false,updatable = false)
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
-
     @Builder
     public Member(String email, String name) {
         this.email = email;
         this.name = name;
-        this.createdAt = LocalDateTime.now();
     }
 
 }
