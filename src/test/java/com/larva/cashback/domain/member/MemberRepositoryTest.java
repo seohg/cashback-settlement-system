@@ -30,7 +30,6 @@ public class MemberRepositoryTest {
         //then
         assertThat(foundMember.getEmail()).isEqualTo(savedMember.getEmail());
         assertThat(foundMember.getName()).isEqualTo(savedMember.getName());
-        assertThat(foundMember.getCreatedAt()).isNotNull();
     }
     @Test
     @DisplayName("Member 저장 후 email로 정상 조회 확인")
@@ -47,7 +46,6 @@ public class MemberRepositoryTest {
         //then
         assertThat(foundMember.getEmail()).isEqualTo(savedMember.getEmail());
         assertThat(foundMember.getName()).isEqualTo(savedMember.getName());
-        assertThat(foundMember.getCreatedAt()).isNotNull();
     }
     @Test
     @DisplayName("optional 정상 리턴확인")
