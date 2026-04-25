@@ -26,6 +26,9 @@ public class Sales extends BaseEntity {
     private String merchantCategory;
 
     @Column(nullable = false)
+    private String merchantCode;
+
+    @Column(nullable = false)
     private int amount;
 
     @Column(nullable = false)
@@ -42,6 +45,7 @@ public class Sales extends BaseEntity {
     public Sales(Card card, String merchantCategory, int amount, int installmentMonth, Sales originalSales) {
         this.card = card;
         this.merchantCategory = merchantCategory;
+        this.merchantCode = merchantCategory;
         this.amount = amount;
         this.installmentMonth = installmentMonth;
         this.isCancelled = originalSales != null;

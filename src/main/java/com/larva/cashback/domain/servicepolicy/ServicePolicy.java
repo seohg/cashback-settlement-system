@@ -30,6 +30,9 @@ public class ServicePolicy extends BaseEntity {
     @Column
     private String merchantCategory;
 
+    @Column
+    private String merchantCode;
+
     @Column(nullable = false)
     private int conditionAmount;
 
@@ -59,6 +62,7 @@ public class ServicePolicy extends BaseEntity {
         this.cardProductCode = cardProductCode;
         this.serviceType = serviceType;
         this.merchantCategory = merchantCategory;
+        this.merchantCode = merchantCategory;
         this.conditionAmount = conditionAmount;
         this.benefitRate = benefitRate;
         this.maxBenefitAmount = maxBenefitAmount;
