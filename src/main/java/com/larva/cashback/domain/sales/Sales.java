@@ -45,7 +45,7 @@ public class Sales extends BaseEntity {
     public Sales(Card card, String merchantCategory, int amount, int installmentMonth, Sales originalSales) {
         this.card = card;
         this.merchantCategory = merchantCategory;
-        this.merchantCode = merchantCategory;
+        this.merchantCode = merchantCode;
         this.amount = amount;
         this.installmentMonth = installmentMonth;
         this.isCancelled = originalSales != null;

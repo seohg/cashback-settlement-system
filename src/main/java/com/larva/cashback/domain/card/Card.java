@@ -23,10 +23,13 @@ public class Card extends BaseEntity {
 
     @Column(nullable = false, unique = true)
     private String cardNumber;
+
     @Column(nullable = false)
     private int cardLimit;
+
     @Column(nullable = false)
     private int usedAmount;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private CardStatus status;
@@ -40,5 +43,18 @@ public class Card extends BaseEntity {
         this.usedAmount = 0;
         this.status = CardStatus.ACTIVE;
     }
-}
+    public boolean isBlocked() {
+        return this.status == CardStatus.BLOCKED;
+    }
 
+    public boolean isPayable(int amount) {
+        return (this.usedAmount + amount) <= this.cardLimit;
+    }
+    public void use(int amount) {
+        this.usedAmount += amount;
+    }
+
+    public void restore(int amount) {
+        this.usedAmount -= amount;
+    }
+}
