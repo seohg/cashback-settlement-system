@@ -42,7 +42,7 @@ public class Sales extends BaseEntity {
     private Sales originalSales;
 
     @Builder
-    public Sales(Card card, String merchantCategory, int amount, int installmentMonth, Sales originalSales) {
+    public Sales(Card card, String merchantCategory, String merchantCode, int amount, int installmentMonth, Sales originalSales) {
         this.card = card;
         this.merchantCategory = merchantCategory;
         this.merchantCode = merchantCode;
