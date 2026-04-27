@@ -100,7 +100,7 @@ class SalesServiceTest {
 
             // when & then
             assertThatThrownBy(() ->
-                    salesService.createSales(999L, "M001", "FOOD", 50_000, 0))
+                    salesService.createSales(999L, "M001", "FOOD", 50000, 0))
                     .isInstanceOf(CardNotFoundException.class);
 
             verify(salesRepository, never()).save(any());
@@ -109,14 +109,14 @@ class SalesServiceTest {
         @Test
         @DisplayName("BLOCKED 카드 → CardBlockedException")
         void cardBlocked() {
-            // given — BLOCKED 상태의 카드 생성
+            // given
             Card blockedCard = createBlockedCard();
             given(cardRepository.findByIdWithLock(anyLong()))
                     .willReturn(Optional.of(blockedCard));
 
             // when & then
             assertThatThrownBy(() ->
-                    salesService.createSales(1L, "M001", "FOOD", 50_000, 0))
+                    salesService.createSales(1L, "M001", "FOOD", 50000, 0))
                     .isInstanceOf(CardBlockedException.class);
 
             verify(salesRepository, never()).save(any());
@@ -132,7 +132,7 @@ class SalesServiceTest {
 
             // when & then — 15만원 추가 결제 시도 (90 + 15 = 105 > 100)
             assertThatThrownBy(() ->
-                    salesService.createSales(1L, "M001", "FOOD", 150_000, 0))
+                    salesService.createSales(1L, "M001", "FOOD", 150000, 0))
                     .isInstanceOf(LimitExceededException.class);
 
             verify(salesRepository, never()).save(any());
