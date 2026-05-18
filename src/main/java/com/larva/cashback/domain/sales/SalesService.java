@@ -2,12 +2,16 @@ package com.larva.cashback.domain.sales;
 
 import com.larva.cashback.domain.card.Card;
 import com.larva.cashback.domain.card.CardRepository;
+import com.larva.cashback.domain.sales.event.SalesCancelledEvent;
+import com.larva.cashback.domain.sales.event.SalesCreatedEvent;
+import com.larva.cashback.domain.sales.event.SalesEvent;
 import com.larva.cashback.domain.serviceapplication.ServiceApplication;
 import com.larva.cashback.domain.serviceapplication.ServiceApplicationRepository;
 import com.larva.cashback.global.exception.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.context.ApplicationEventPublisher;
 
 import java.util.List;
 
@@ -19,7 +23,7 @@ public class SalesService {
     private final CardRepository cardRepository;
     private final SalesRepository salesRepository;
     private final ServiceApplicationRepository serviceApplicationRepository;
-
+    private final ApplicationEventPublisher applicationEventPublisher;
 
     /**
     * 매입
@@ -59,6 +63,9 @@ public class SalesService {
 
         // 5. 한도 업데이트
         card.use(amount);
+
+        // 6. Kafka 발행 이벤트 등록
+        applicationEventPublisher.publishEvent(new SalesCreatedEvent(SalesEvent.from(sales)));
 
         return sales;
     }
@@ -101,6 +108,9 @@ public class SalesService {
         // 5. 카드 한도 복원
         Card card = cardRepository.findByIdWithLock(originalSales.getCard().getId()).orElseThrow(CardNotFoundException::new);
         card.restore(originalSales.getAmount());
+
+        //6. kafka 발행 이벤트 등록
+        applicationEventPublisher.publishEvent(new SalesCancelledEvent(SalesEvent.from(cancelSales)));
 
         return cancelSales;
     }

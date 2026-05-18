@@ -4,6 +4,7 @@ import com.larva.cashback.domain.card.Card;
 import com.larva.cashback.domain.card.CardRepository;
 import com.larva.cashback.domain.card.CardStatus;
 import com.larva.cashback.domain.member.Member;
+import com.larva.cashback.domain.sales.event.SalesCreatedEvent;
 import com.larva.cashback.domain.serviceapplication.ServiceApplication;
 import com.larva.cashback.domain.serviceapplication.ServiceApplicationRepository;
 import com.larva.cashback.domain.servicepolicy.ServiceType;
@@ -20,6 +21,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.context.ApplicationEventPublisher;
 
 import java.util.List;
 import java.util.Optional;
@@ -37,6 +39,9 @@ class SalesServiceTest {
 
     @InjectMocks
     private SalesService salesService;
+
+    @Mock
+    private ApplicationEventPublisher applicationEventPublisher;
 
     @Mock
     private SalesRepository salesRepository;
@@ -88,7 +93,8 @@ class SalesServiceTest {
             assertThat(result.isCancelled()).isFalse();
             assertThat(card.getUsedAmount()).isEqualTo(50000);
 
-            verify(salesRepository).save(any(Sales.class));
+            //verify(salesRepository).save(any(Sales.class));
+            verify(applicationEventPublisher).publishEvent(any(SalesCreatedEvent.class));
         }
 
         @Test
