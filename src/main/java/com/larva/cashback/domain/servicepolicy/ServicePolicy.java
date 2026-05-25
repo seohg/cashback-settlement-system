@@ -56,13 +56,14 @@ public class ServicePolicy extends BaseEntity {
 
     @Builder
     public ServicePolicy(String cardProductCode, ServiceType serviceType,
-                         String merchantCategory, int conditionAmount,
-                         double benefitRate, int maxBenefitAmount,
-                         int priority, LocalDateTime validFrom, LocalDateTime validTo) {
+                         String merchantCode, String merchantCategory,
+                         int conditionAmount, double benefitRate,
+                         int maxBenefitAmount, int priority,
+                         LocalDateTime validFrom, LocalDateTime validTo) {
         this.cardProductCode = cardProductCode;
         this.serviceType = serviceType;
+        this.merchantCode = merchantCode;
         this.merchantCategory = merchantCategory;
-        this.merchantCode = merchantCategory;
         this.conditionAmount = conditionAmount;
         this.benefitRate = benefitRate;
         this.maxBenefitAmount = maxBenefitAmount;
