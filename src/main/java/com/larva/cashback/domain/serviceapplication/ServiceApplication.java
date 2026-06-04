@@ -42,6 +42,7 @@ public class ServiceApplication {
         this.serviceType = serviceType;
         this.benefitAmount = benefitAmount;
         this.isApplied = true;
+        this.paymentStatus = PaymentStatus.PENDING;
     }
 
     public void cancel() {
