@@ -23,11 +23,13 @@ public class Member extends BaseEntity {
     private String email;
     @Column(nullable = false)
     private String name;
-
+    @Column
+    private String address;
     @Builder
-    public Member(String email, String name) {
+    public Member(String email, String name, String address) {
         this.email = email;
         this.name = name;
+        this.address = address;
     }
 
 }

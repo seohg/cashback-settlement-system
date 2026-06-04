@@ -1,4 +1,4 @@
-package com.larva.cashback.batch;
+package com.larva.cashback.domain.batch;
 
 import com.larva.cashback.domain.serviceapplication.ServiceApplication;
 import com.larva.cashback.global.exception.AddressNotFoundException;
@@ -18,22 +18,22 @@ public class CashbackItemProcessor implements ItemProcessor<ServiceApplication, 
     /**
      * 캐시백 정산 처리
      *
-     * 1. 이중 검증 — Sales.isCancelled 재확인 (DLT 미처리건 최종 보완)
-     * 2. 주소 미등록 체크 — AddressNotFoundException (skip 대상)
-     * 3. 금액 분할 — 999만원 초과 시 자동 분할
+     * 1. Sales.isCancelled 재확인
+     * 2. 주소 미등록 체크
+     * 3. 금액 분할
      *
      */
     @Override
     public List<ServiceApplication> process(ServiceApplication item) throws Exception {
 
-        // 1. 이중 검증 — 취소건인데 isApplied=true로 남아있는 경우 (DLT 누락건)
+        // 1. Sales.isCancelled 재확인
         if (item.getSales().isCancelled()) {
             log.warn("[이중검증] 취소건 skip: salesId={}, serviceApplicationId={}", item.getSales().getId(), item.getId());
             item.skip();
             return null;
         }
 
-        // 2. 주소 미등록 체크 (실무에서는 회원 주소 조회)
+        // 2. 주소 미등록 체크
         if (item.getSales().getCard().getMember() != null && item.getSales().getCard().getMember().getAddress() == null) {
             throw new AddressNotFoundException();
         }
@@ -77,7 +77,7 @@ public class CashbackItemProcessor implements ItemProcessor<ServiceApplication, 
         last.markAsPaid();
         splitList.add(last);
 
-        // 원본은 skip 처리 (분할건으로 대체)
+        // 원본은 skip 처리
         original.skip();
 
         log.info("[금액분할] 분할 완료: {}건으로 분할", splitList.size());

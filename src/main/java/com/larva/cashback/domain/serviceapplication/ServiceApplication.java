@@ -31,6 +31,11 @@ public class ServiceApplication {
     @Column(nullable = false)
     private boolean isApplied; // Y: 정상, N : 취소
 
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private PaymentStatus paymentStatus;
+
     @Builder
     public ServiceApplication(Sales sales, ServiceType serviceType, int benefitAmount) {
         this.sales = sales;
@@ -41,6 +46,14 @@ public class ServiceApplication {
 
     public void cancel() {
         this.isApplied = false;
+    }
+
+    public void markAsPaid() {
+        this.paymentStatus = PaymentStatus.PAID;
+    }
+
+    public void skip() {
+        this.paymentStatus = PaymentStatus.SKIPPED;
     }
 
 }
