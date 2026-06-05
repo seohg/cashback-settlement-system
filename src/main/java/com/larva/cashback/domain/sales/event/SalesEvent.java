@@ -14,16 +14,18 @@ public class SalesEvent {
     private String merchantCode;
     private String merchantCategory;
     private int amount;
+    private Long originalSalesId;
 
     @Builder
     public SalesEvent(Long salesId, Long cardId,  String cardProductCode,
-                      String merchantCode, String merchantCategory, int amount) {
+                      String merchantCode, String merchantCategory, int amount, Long originalSalesId) {
         this.salesId = salesId;
         this.cardId = cardId;
         this.cardProductCode = cardProductCode;
         this.merchantCode = merchantCode;
         this.merchantCategory = merchantCategory;
         this.amount = amount;
+        this.originalSalesId = originalSalesId;
     }
     public static SalesEvent from(Sales sales) {
         return SalesEvent.builder()
@@ -33,6 +35,8 @@ public class SalesEvent {
                 .merchantCode(sales.getMerchantCode())
                 .merchantCategory(sales.getMerchantCategory())
                 .amount(sales.getAmount())
+                .originalSalesId(sales.getOriginalSales() != null
+                        ? sales.getOriginalSales().getId() : null)
                 .build();
     }
 

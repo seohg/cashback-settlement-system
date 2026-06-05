@@ -55,7 +55,8 @@ class SalesEventProducerTest {
                 .cardProductCode("A00001")
                 .merchantCode("M001")
                 .merchantCategory("FOOD")
-                .amount(50_000)
+                .amount(50000)
+                .originalSalesId(1L)
                 .build();
 
         SalesCancelledEvent event = new SalesCancelledEvent(salesEvent);

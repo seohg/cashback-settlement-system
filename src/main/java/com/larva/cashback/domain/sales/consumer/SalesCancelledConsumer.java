@@ -25,7 +25,7 @@ public class SalesCancelledConsumer {
     /**
      * 취소건 처리
      *
-     * 1. salesId로 원매출 조회
+     * 1. 원매출 조회
      * 2. 없으면 → 예외 던져서 Retry
      * 3. 있으면 → 연관 ServiceApplication 조회
      *    - 있으면 → isApplied=false 처리
@@ -34,22 +34,22 @@ public class SalesCancelledConsumer {
     @KafkaListener(topics = "sales.cancelled", groupId = "cashback-group")
     @Transactional
     public void consume(SalesEvent event) {
-        log.info("취소건 수신: salesId={}, cardId={}", event.getSalesId(), event.getCardId());
+        log.info("취소건 수신: salesId={}, cardId={}", event.getSalesId(), event.getOriginalSalesId());
 
         // 1. 원매출 조회
-        Optional<Sales> originalSales = salesRepository.findById(event.getSalesId());
+        Optional<Sales> originalSales = salesRepository.findById(event.getOriginalSalesId());
 
         if (originalSales.isEmpty()) {
             // 순서 역전: 정상건이 아직 DB에 없음 → Retry
-            log.warn("원매출 미존재 — 순서 역전 판단, Retry: salesId={}", event.getSalesId());
-            throw new IllegalStateException("Original sales not found for salesId: " + event.getSalesId());
+            log.warn("원매출 미존재 — 순서 역전 판단, Retry: salesId={}", event.getOriginalSalesId());
+            throw new IllegalStateException("Original sales not found for salesId: " + event.getOriginalSalesId());
         }
 
         // 2. 연관 ServiceApplication 조회
-        List<ServiceApplication> applications = serviceApplicationRepository.findBySalesId(event.getSalesId());
+        List<ServiceApplication> applications = serviceApplicationRepository.findBySalesId(event.getOriginalSalesId());
 
         if (applications.isEmpty()) {
-            log.info("서비스 미적용 건, 취소 처리 불필요: salesId={}", event.getSalesId());
+            log.info("서비스 미적용 건, 취소 처리 불필요: originalSalesId={}",event.getOriginalSalesId());
             return;
         }
 
