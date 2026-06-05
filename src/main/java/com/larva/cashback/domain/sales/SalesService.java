@@ -85,7 +85,7 @@ public class SalesService {
         Sales originalSales = salesRepository.findById(salesId).orElseThrow(SalesNotFoundException::new);
 
         // 2. 기 취소건 체크
-        if (originalSales.isCancelled()) {
+        if (salesRepository.existsByOriginalSalesId(originalSales.getId())) {
             throw new SalesAlreadyCancelledException();
         }
 

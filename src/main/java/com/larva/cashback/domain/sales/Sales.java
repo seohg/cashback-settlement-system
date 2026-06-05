@@ -34,9 +34,6 @@ public class Sales extends BaseEntity {
     @Column(nullable = false)
     private int installmentMonth;
 
-    @Column(nullable = false)
-    private boolean isCancelled;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "original_sales_id")
     private Sales originalSales;
@@ -48,8 +45,10 @@ public class Sales extends BaseEntity {
         this.merchantCode = merchantCode;
         this.amount = amount;
         this.installmentMonth = installmentMonth;
-        this.isCancelled = originalSales != null;
         this.originalSales = originalSales;
+    }
+    public boolean isCancelled() {
+        return this.originalSales != null;
     }
 }
 

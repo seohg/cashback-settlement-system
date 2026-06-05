@@ -206,28 +206,20 @@ class SalesServiceTest {
         @Test
         @DisplayName("이미 취소된 건 재취소 → SalesAlreadyCancelledException")
         void alreadyCancelled() {
-            // given — 취소건(isCancelled=true)
-            Sales cancelledSales = Sales.builder()
+            // given
+            Sales originalSales = Sales.builder()
                     .card(card)
                     .merchantCode("M001")
                     .merchantCategory("FOOD")
-                    .amount(50_000)
+                    .amount(50000)
                     .installmentMonth(0)
-                    .originalSales(Sales.builder()
-                            .card(card)
-                            .merchantCode("M001")
-                            .merchantCategory("FOOD")
-                            .amount(50_000)
-                            .installmentMonth(0)
-                            .build())
                     .build();
 
-            given(salesRepository.findById(anyLong()))
-                    .willReturn(Optional.of(cancelledSales));
+            given(salesRepository.findById(anyLong())).willReturn(Optional.of(originalSales));
+            given(salesRepository.existsByOriginalSalesId(anyLong())).willReturn(true);
 
             // when & then
-            assertThatThrownBy(() -> salesService.cancelSales(1L))
-                    .isInstanceOf(SalesAlreadyCancelledException.class);
+            assertThatThrownBy(() -> salesService.cancelSales(1L)).isInstanceOf(SalesAlreadyCancelledException.class);
         }
     }
 
