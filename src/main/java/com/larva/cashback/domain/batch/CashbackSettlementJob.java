@@ -5,6 +5,7 @@ import com.larva.cashback.domain.serviceapplication.ServiceApplication;
 import com.larva.cashback.domain.serviceapplication.ServiceApplicationRepository;
 import com.larva.cashback.domain.servicepolicy.ServiceType;
 import com.larva.cashback.global.exception.AddressNotFoundException;
+import com.larva.cashback.global.exception.CancelledSalesException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
@@ -51,6 +52,7 @@ public class CashbackSettlementJob {
                 .writer(cashbackItemWriter)
                 .faultTolerant()
                 .skip(AddressNotFoundException.class)
+                .skip(CancelledSalesException.class)
                 .skipLimit(100)
                 .build();
     }

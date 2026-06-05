@@ -2,6 +2,7 @@ package com.larva.cashback.domain.batch;
 
 import com.larva.cashback.domain.serviceapplication.ServiceApplication;
 import com.larva.cashback.global.exception.AddressNotFoundException;
+import com.larva.cashback.global.exception.CancelledSalesException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.stereotype.Component;
@@ -28,9 +29,8 @@ public class CashbackItemProcessor implements ItemProcessor<ServiceApplication, 
 
         // 1. Sales.isCancelled 재확인
         if (item.getSales().isCancelled()) {
-            log.warn("[이중검증] 취소건 skip: salesId={}, serviceApplicationId={}", item.getSales().getId(), item.getId());
-            item.skip();
-            return null;
+            log.warn("[이중검증] 취소건 skip: salesId={}", item.getSales().getId());
+            throw new CancelledSalesException(item.getSales().getId());
         }
 
         // 2. 주소 미등록 체크
