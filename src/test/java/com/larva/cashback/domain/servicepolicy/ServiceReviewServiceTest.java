@@ -33,6 +33,9 @@ class ServiceReviewServiceTest {
     private ServiceReviewService serviceReviewService;
 
     @Mock
+    private ServicePolicyCacheService servicePolicyCacheService;
+
+    @Mock
     private ServicePolicyRepository servicePolicyRepository;
 
     @Mock
@@ -252,7 +255,7 @@ class ServiceReviewServiceTest {
 
     private void stubPolicies(List<ServicePolicy> policies) {
         given(salesRepository.findById(any())).willReturn(Optional.of(sales));
-        given(serviceReviewService.getCachedPolicies("A00001")).willReturn(policies);
+        given(servicePolicyCacheService.getPolicies("A00001")).willReturn(policies);
     }
 
     private ServicePolicy createPolicy(String merchantCode, String merchantCategory,

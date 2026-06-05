@@ -23,6 +23,7 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true)
 public class ServiceReviewService {
 
+    private final ServicePolicyCacheService servicePolicyCacheService;
     private final ServicePolicyRepository servicePolicyRepository;
     private final SalesRepository salesRepository;
     private final ServiceApplicationRepository serviceApplicationRepository;
@@ -43,7 +44,7 @@ public class ServiceReviewService {
                 .orElseThrow(() -> new IllegalArgumentException("Sales not found: " + event.getSalesId()));
 
         // 2. 정책 조회 (Redis 캐시)
-        List<ServicePolicy> policies = getCachedPolicies(event.getCardProductCode());
+        List<ServicePolicy> policies = servicePolicyCacheService.getPolicies(event.getCardProductCode());
 
         // 3. 조건 필터링
         LocalDateTime now = LocalDateTime.now();
@@ -82,14 +83,6 @@ public class ServiceReviewService {
         }
     }
 
-    /**
-     * Redis 캐시 조회 — cardProductCode 기준
-     */
-    @Cacheable(value = "policy", key = "#cardProductCode")
-    public List<ServicePolicy> getCachedPolicies(String cardProductCode) {
-        log.info("Redis 캐시 미스 — DB 조회: cardProductCode={}", cardProductCode);
-        return servicePolicyRepository.findByCardProductCodeAndIsActiveTrue(cardProductCode);
-    }
     /**
      * merchantCode 조건 매칭
      */
