@@ -11,6 +11,9 @@ spring:
   sql:
     init:
       mode: never # always
+  batch:
+    jdbc:
+      initialize-schema: always
 
   kafka:
     bootstrap-servers: localhost:9092
@@ -29,3 +32,9 @@ spring:
     redis:
       host: localhost
       port: 6380
+
+  springdoc:
+    api-docs:
+      path: /v3/api-docs
+    swagger-ui:
+      path: /swagger-ui.html
