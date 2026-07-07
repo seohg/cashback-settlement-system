@@ -8,6 +8,7 @@ import com.larva.cashback.domain.serviceapplication.ServiceApplication;
 import com.larva.cashback.domain.servicepolicy.ServiceType;
 import com.larva.cashback.global.exception.AddressNotFoundException;
 import com.larva.cashback.domain.batch.CashbackItemProcessor;
+import com.larva.cashback.global.exception.CancelledSalesException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -26,10 +27,8 @@ class CashbackItemProcessorTest {
     void cancelledSales_skip() throws Exception {
         ServiceApplication item = createApplication(createCancelledSales(), 2_500);
 
-        // when
         List<ServiceApplication> result = processor.process(item);
 
-        // then
         assertThat(result).isNull();
         assertThat(item.getPaymentStatus()).isEqualTo(PaymentStatus.SKIPPED);
     }

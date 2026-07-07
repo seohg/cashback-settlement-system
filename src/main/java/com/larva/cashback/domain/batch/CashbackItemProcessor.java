@@ -29,8 +29,9 @@ public class CashbackItemProcessor implements ItemProcessor<ServiceApplication, 
 
         // 1. Sales.isCancelled 재확인
         if (item.getSales().isCancelled()) {
-            log.warn("[이중검증] 취소건 skip: salesId={}", item.getSales().getId());
-            throw new CancelledSalesException(item.getSales().getId());
+            log.warn("[이중검증] 취소건 skip: salesId={}, serviceApplicationId={}", item.getSales().getId(), item.getId());
+            item.skip();
+            return null;
         }
 
         // 2. 주소 미등록 체크

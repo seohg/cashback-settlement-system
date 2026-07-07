@@ -52,7 +52,6 @@ public class CashbackSettlementJob {
                 .writer(cashbackItemWriter)
                 .faultTolerant()
                 .skip(AddressNotFoundException.class)
-                .skip(CancelledSalesException.class)
                 .skipLimit(100)
                 .build();
     }

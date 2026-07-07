@@ -8,6 +8,7 @@ import org.springframework.batch.item.Chunk;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -20,12 +21,10 @@ public class CashbackItemWriter implements ItemWriter<List<ServiceApplication>> 
     @Override
     public void write(Chunk<? extends List<ServiceApplication>> chunk) throws Exception {
         int count = 0;
+        List<ServiceApplication> all = new ArrayList<>();
         for (List<ServiceApplication> applications : chunk) {
-            for (ServiceApplication application : applications) {
-                serviceApplicationRepository.save(application);
-                count++;
-            }
+            all.addAll(applications);
         }
-        log.info("[배치] {}건 저장 완료", count);
+        serviceApplicationRepository.saveAll(all);
     }
 }

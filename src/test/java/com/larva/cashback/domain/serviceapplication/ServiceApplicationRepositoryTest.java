@@ -52,6 +52,7 @@ public class ServiceApplicationRepositoryTest {
 
         sales = Sales.builder()
                 .card(card)
+                .merchantCode("M001")
                 .merchantCategory("FOOD")
                 .amount(50000)
                 .installmentMonth(0)

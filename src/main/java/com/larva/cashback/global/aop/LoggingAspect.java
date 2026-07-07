@@ -10,7 +10,8 @@ import org.springframework.stereotype.Component;
 @Component
 @Slf4j
 public class LoggingAspect {
-    @Around("execution(* com.larva.cashback.domain..*Service.*(..))")
+    @Around("execution(* com.larva.cashback.domain..*Service.*(..)) " +
+            "&& !execution(* com.larva.cashback.domain.servicepolicy.ServicePolicyCacheService.*(..))")
     public Object logService(ProceedingJoinPoint joinPoint) throws Throwable {
 
         String methodName = joinPoint.getSignature().getName();
