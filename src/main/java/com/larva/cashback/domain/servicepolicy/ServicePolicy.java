@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 
@@ -14,7 +15,7 @@ import java.time.LocalDateTime;
 @Table(name = "service_policy")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ServicePolicy extends BaseEntity {
+public class ServicePolicy extends BaseEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
