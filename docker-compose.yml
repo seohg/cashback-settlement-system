@@ -1,6 +1,21 @@
 version: "3.8"
 
 services:
+  app:
+    build: .
+    container_name: cashback-app
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    depends_on:
+      mysql:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
   mysql:
     image: mysql:8.0
     container_name: cashback-mysql
@@ -58,7 +73,6 @@ services:
         condition: service_healthy
     entrypoint: ["/bin/sh", "-c"]
     command: |
-      "
       echo 'Creating topics...'
       kafka-topics --create --if-not-exists --bootstrap-server kafka:29092 --partitions 3 --replication-factor 1 --topic sales.created
       kafka-topics --create --if-not-exists --bootstrap-server kafka:29092 --partitions 3 --replication-factor 1 --topic sales.cancelled
@@ -67,7 +81,7 @@ services:
 
       echo 'Topics created:'
       kafka-topics --list --bootstrap-server kafka:29092
-      "
+
   redis:
     image: redis:7-alpine
     container_name: cashback-redis
