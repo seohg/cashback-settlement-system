@@ -1,6 +1,8 @@
 spring:
   datasource:
-    url: jdbc:mysql://mysql:3306/cashback?serverTimezone=Asia/Seoul
+    url: jdbc:mysql://${DB_HOST:mysql}:${DB_PORT:3306}/cashback?serverTimezone=Asia/Seoul
+    username: ${DB_USERNAME:cashback_user}
+    password: ${DB_PASSWORD:cashback1234}
   kafka:
     bootstrap-servers: kafka:29092
   data:

@@ -16,23 +16,22 @@ services:
       redis:
         condition: service_healthy
 
-  mysql:
-    image: mysql:8.0
-    container_name: cashback-mysql
-    ports:
-      - "3307:3306"
-    environment:
-      MYSQL_ROOT_PASSWORD: root1234
-      MYSQL_DATABASE: cashback
-      MYSQL_USER: cashback_user
-      MYSQL_PASSWORD: cashback1234
-    volumes:
-      - mysql_data:/var/lib/mysql
-    healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
+app:
+  build: .
+  container_name: cashback-app
+  ports:
+    - "8080:8080"
+  environment:
+    SPRING_PROFILES_ACTIVE: docker
+    DB_HOST: ${DB_HOST}
+    DB_PORT: ${DB_PORT}
+    DB_USERNAME: ${DB_USERNAME}
+    DB_PASSWORD: ${DB_PASSWORD}
+  depends_on:
+    kafka:
+      condition: service_healthy
+    redis:
+      condition: service_healthy
 
   zookeeper:
     image: confluentinc/cp-zookeeper:7.5.0
