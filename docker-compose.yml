@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
   app:
     build: .
@@ -8,30 +6,15 @@ services:
       - "8080:8080"
     environment:
       SPRING_PROFILES_ACTIVE: docker
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
     depends_on:
-      mysql:
-        condition: service_healthy
       kafka:
         condition: service_healthy
       redis:
         condition: service_healthy
-
-app:
-  build: .
-  container_name: cashback-app
-  ports:
-    - "8080:8080"
-  environment:
-    SPRING_PROFILES_ACTIVE: docker
-    DB_HOST: ${DB_HOST}
-    DB_PORT: ${DB_PORT}
-    DB_USERNAME: ${DB_USERNAME}
-    DB_PASSWORD: ${DB_PASSWORD}
-  depends_on:
-    kafka:
-      condition: service_healthy
-    redis:
-      condition: service_healthy
 
   zookeeper:
     image: confluentinc/cp-zookeeper:7.5.0
@@ -63,7 +46,6 @@ app:
     depends_on:
       - zookeeper
 
-  # Kafka 토픽 자동 생성 — Kafka healthy 후 1회 실행
   kafka-init:
     image: confluentinc/cp-kafka:7.5.0
     container_name: cashback-kafka-init
@@ -91,6 +73,3 @@ app:
       interval: 10s
       timeout: 5s
       retries: 5
-
-volumes:
-  mysql_data:
