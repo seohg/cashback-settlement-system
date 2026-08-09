@@ -27,7 +27,6 @@ public class SalesRepositoryTest {
     private Card card;
 
     @BeforeEach
-        // 각 테스트 실행 전에 공통 데이터 세팅
     void setUp() {
         Member member = Member.builder()
                 .email("larvq@larva.com")
@@ -35,7 +34,7 @@ public class SalesRepositoryTest {
                 .build();
         memberRepository.save(member);
 
-        Card card = Card.builder()
+        card = Card.builder()
                 .member(member)
                 .cardProductCode("A300012")
                 .cardNumber("1234-5678-9101-1121")
@@ -50,12 +49,12 @@ public class SalesRepositoryTest {
         // given
         Sales sales = Sales.builder()
                 .card(card)
+                .merchantCode("M001")
                 .merchantCategory("FOOD")
                 .amount(50000)
                 .installmentMonth(0)
                 .originalSales(null)
                 .build();
-
         // when
         Sales saved = salesRepository.save(sales);
         Sales found = salesRepository.findById(saved.getId()).orElseThrow();
@@ -72,6 +71,7 @@ public class SalesRepositoryTest {
         // given
         Sales originalSales = Sales.builder()
                 .card(card)
+                .merchantCode("M001")
                 .merchantCategory("FOOD")
                 .amount(50_000)
                 .installmentMonth(0)
@@ -81,6 +81,7 @@ public class SalesRepositoryTest {
 
         Sales cancelSales = Sales.builder()
                 .card(card)
+                .merchantCode("M001")
                 .merchantCategory("FOOD")
                 .amount(50_000)
                 .installmentMonth(0)

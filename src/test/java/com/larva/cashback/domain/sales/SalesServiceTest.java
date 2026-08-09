@@ -22,6 +22,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.List;
 import java.util.Optional;
@@ -214,9 +215,10 @@ class SalesServiceTest {
                     .amount(50000)
                     .installmentMonth(0)
                     .build();
+            ReflectionTestUtils.setField(originalSales, "id", 1L);  // id 강제 주입
 
             given(salesRepository.findById(anyLong())).willReturn(Optional.of(originalSales));
-            given(salesRepository.existsByOriginalSalesId(anyLong())).willReturn(true);
+            given(salesRepository.existsByOriginalSalesId(1L)).willReturn(true);  // anyLong() 대신 명시적 값
 
             // when & then
             assertThatThrownBy(() -> salesService.cancelSales(1L)).isInstanceOf(SalesAlreadyCancelledException.class);
